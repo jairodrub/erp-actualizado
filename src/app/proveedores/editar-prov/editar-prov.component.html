@@ -1,0 +1,116 @@
+<div class="barra-fija">
+  <div title="Proveedores" routerLink="/listado-proveedores">
+    <!-- Lo metemos para que vaya a proveedores -->
+    <i class="fas fa-address-book"></i>
+  </div>
+  <div title="Facturas" routerLink="/listado-facturas">
+    <!-- Lo metemos para que vaya a facturas -->
+    <i class="fas fa-money-bill-alt"></i>
+  </div>
+</div>
+<div class="col-md-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+        <li class="breadcrumb-item"><a routerLink="/compras">Compras</a></li>
+        <li class="breadcrumb-item"><a routerLink="/listado-proveedores">Proveedores</a></li>
+        <li class="breadcrumb-item active" aria-current="page"
+          *ngIf="autenticacionService.getPermProveedores()">Editar proveedor
+        </li>
+        <li class="breadcrumb-item active" aria-current="page"
+          *ngIf="!autenticacionService.getPermProveedores()">Visualizar proveedor
+        </li>
+      </ol>
+    </nav>
+  </div>
+  <div class="col-md-12 titulo">
+    <span *ngIf="autenticacionService.getPermProveedores()">Editar proveedor</span>
+    <span *ngIf="!autenticacionService.getPermProveedores()">Visualizar proveedor</span>
+    <button class="btn btn-primary" routerLink="/listado-proveedores">
+      Volver
+    </button>
+  </div>
+  
+  <!-- FORMULARIO -->
+  
+  
+  <div class="col-md-8 offset-md-2 col-12"> <!-- Esta clase es de Bootstrap -->
+    <div class="formularios"> <!-- Creamos esta clase para poner borde al formulario -->
+    <h1>Crear proveedor</h1>
+    <form [formGroup]="proveedorForm" (ngSubmit)="editarProv()">
+      <div class="form-group"> <!-- Los campos en Bootstrap van todos con esta clase -->
+        <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre"
+        [(ngModel)]="proveedor.nombre"
+        [readonly]="!autenticacionService.getPermProveedores()">
+      </div>
+      <div class="form-group"> 
+        <input type="text" class="form-control" ngModel formControlName="cif" placeholder="CIF"
+        [(ngModel)]="proveedor.cif"
+        [readonly]="!autenticacionService.getPermProveedores()">
+      </div>
+      <div class="form-group"> 
+        <input type="text" class="form-control" formControlName="domicilio" placeholder="Dirección"
+        [(ngModel)]="proveedor.domicilio"
+        [readonly]="!autenticacionService.getPermProveedores()">
+      </div>
+      <div class="form-group"> 
+        <input type="number" class="form-control" formControlName="cp" placeholder="Código Postal"
+        [(ngModel)]="proveedor.cp"
+        [readonly]="!autenticacionService.getPermProveedores()">
+      </div>
+      <div class="form-group"> 
+        <input type="text" class="form-control" formControlName="localidad" placeholder="Localidad"
+        [(ngModel)]="proveedor.localidad"
+        [readonly]="!autenticacionService.getPermProveedores()">
+      </div>
+      <div class="form-group" *ngIf="!autenticacionService.getPermProveedores()"> 
+        <!-- <label for="provincia">Provincia</label> -->
+        <select class="form-control" formControlName="provincia" [(ngModel)]="proveedor.provincia">
+            <!-- ngValue para objeto, value es para cadenas -->
+          <option *ngFor="let provincia of provincias" [ngValue]="provincia" 
+          [ngClass]="{bandera: provincia === 'Gibraltar'}"> <!-- Estos corchetes lo que hacen es decir 
+                                                            que el atributo de value es un objeto de Javascript. 
+                                                    Cuando llega ahí coge el valor de la varible provincia -->
+            {{provincia}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="!autenticacionService.getPermProveedores()"> 
+          <input type="text" class="form-control" formControlName="provincia" placeholder="Provincia"
+          [(ngModel)]="proveedor.provincia"
+          [readonly]="!autenticacionService.getPermProveedores()">
+        </div>
+      <div class="form-group"> 
+        <input type="text" class="form-control" formControlName="telefono" placeholder="Teléfono"
+        [(ngModel)]="proveedor.telefono"
+        [readonly]="!autenticacionService.getPermProveedores()">
+      </div>
+      <div class="form-group"> 
+        <input type="email" class="form-control"  formControlName="email" placeholder="E-mail"
+        [(ngModel)]="proveedor.email"
+        [readonly]="!autenticacionService.getPermProveedores()">
+      </div>
+      <div class="form-group"> 
+        <input type="text" class="form-control" formControlName="contacto" placeholder="Contacto"
+        [(ngModel)]="proveedor.contacto"
+        [readonly]="!autenticacionService.getPermProveedores()">
+      </div>
+      <div *ngIf="autenticacionService.getPermProveedores()">
+        <button type="submit" class="btn btn-primary">
+            <span>Guardar cambios</span>
+            <!-- <span *ngIf="!enviando">Añadir proveedor</span>
+            <span>
+            <i class="fas fa-spinner fa-pulse"></i>
+            </span> -->
+          </button>
+          <button routerLink="/listado-proveedores" class="btn btn-danger">
+            Cancelar
+          </button>
+      </div>
+      
+    </form>
+    <!-- <p class="alert alert-warning" [@alerta]="estadoAlerta">{{mensaje}}</p> -->
+  </div>  
+  </div>
+  
+  

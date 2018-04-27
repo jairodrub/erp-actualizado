@@ -1,0 +1,142 @@
+<div *ngIf="autenticacionService.getPermLisUsuarios()">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="container titulo">
+    <span>Usuarios</span>
+    <span class="btn btn-warning" [@alerta]="estadoAlerta">
+      {{mensaje}}
+    </span>
+    <button class="btn btn-success" routerLink="/listado-sesiones">
+      Sesiones
+    </button>
+    <button class="btn btn-primary" *ngIf="!mostrarFormulario" (click)="verFormulario()">
+      <i class="fas fa-user-plus"></i>
+    </button>
+    <button class="btn btn-danger" *ngIf="mostrarFormulario" (click)="verFormulario()">
+      <i class="fas fa-ban"></i>
+    </button>
+  </div>
+  <div class="container"[@formulario]="estadoFormulario">
+    <form class="fila" [formGroup]="crearUsuarioForm" (ngSubmit)="crearUsuario()">
+      <div class="nuevo">
+        <input type="text" placeholder="Nombre" formControlName="nombre">
+      </div>
+      <div class="nuevo">
+        <input type="email" placeholder="Correo Electrónico" formControlName="email">
+      </div>
+      <div class="nuevo">
+        <input type="password" placeholder="Contraseña" formControlName="password">
+      </div>
+      <div class="nuevo">
+        <select formControlName="rol">
+          <option value="Administrador">Administrador</option>
+          <option value="Director de Compras">Director de Compras</option>
+          <option value="Empleado de Compras">Empleado de Compras</option>
+          <option value="Director de Ventas">Director de Ventas</option>
+          <option value="Empleado de Ventas">Empleado de Ventas</option>
+        </select>
+      </div>
+      <div class="nuevo">
+        <button type="submit" class="btn btn-primary" [disabled]="crearUsuarioForm.invalid">
+          <span *ngIf="!enviando">
+            <i class="far fa-save"></i>
+          </span>
+          <span *ngIf="enviando">
+            <i class="fas fa-spinner fa-pulse"></i>
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="container">
+    <div class="cabecera">
+      <div class="campo"><p>Nombre</p></div>
+      <div class="campo"><p>Correo Electrónico</p></div>
+      <div class="campo"><p>Rol de usuario</p></div>
+      <div class="campo"></div>
+    </div>
+    <!-- ciclo For -->
+    <div *ngFor="let usuario of usuarios">
+      <form class="fila editable" [formGroup]="editarUsuarioForm" *ngIf="usuario._id === editarFila">
+        <div class="campo">
+          <input type="text" formControlName="nombre" [(ngModel)]="usuario.nombre">
+        </div>
+        <div class="campo">
+          <input type="text" formControlName="email" [(ngModel)]="usuario.email">
+        </div>
+        <div class="campo">
+          <!-- ngModel con corchetes solo va al componente, sin: bidireccional -->
+          <select type="text" formControlName="rol" [(ngModel)]="usuario.rol">
+            <option value="Administrador">Administrador</option>
+            <option value="Director de Compras">Director de Compras</option>
+            <option value="Empleado de Compras">Empleado de Compras</option>
+            <option value="Director de Ventas">Director de Ventas</option>
+            <option value="Empleado de Ventas">Empleado de Ventas</option>
+          </select>
+        </div>
+        <div class="campo">
+          <button class="btn btn-primary" (click)="editarUsuario(usuario._id)">
+              <span *ngIf="!enviando">
+                  <i class="far fa-save"></i>
+                </span>
+                <span *ngIf="enviando">
+                  <i class="fas fa-spinner fa-pulse"></i>
+                </span>
+          </button>
+          <button class="btn btn-danger" (click)="cancelarEdicion()">
+            <i class="fas fa-ban"></i>
+          </button>
+        </div>
+      </form>
+      <div class="fila" *ngIf="usuario._id !== editarFila">
+        <div class="campo">{{usuario.nombre}}</div>
+        <div class="campo">{{usuario.email}}</div>
+        <div class="campo">{{usuario.rol}}</div>
+        <div class="campo">
+          <button class="btn btn-success" (click)="modificarUsuario(usuario._id)"
+          [disabled]="editarFila && usuario._id !== editarFila">
+            <i class="fas fa-pen-square"></i>
+          </button>
+          <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"
+          (click)="getId(usuario._id)">
+            <!-- para la ventana modal -->
+            <i class="fas fa-trash-alt"></i>
+          </button>
+          <button class="btn btn-warning" routerLink="/listado-sesiones/{{usuario.nombre}}">
+            <i class="far fa-clock"></i>
+          </button>
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  ¿Está seguro de eliminar el usuario?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal"
+                      (click)="borrarUsuario()">
+                    Aceptar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

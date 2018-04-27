@@ -1,0 +1,277 @@
+.menu-inicio {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.box {
+    width: 300px;
+    height: 200px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 40px;
+    cursor: pointer;
+    transition: 500ms all;
+}
+
+.box span {
+    font-size: 80px;
+}
+
+.box p {
+    color: white;
+    font-size: 26px;
+}
+
+.rojo {background-color: #d9534f;}
+.rojo:hover  {background-color: #e45954;}
+.rojo span {color: #c54b47;}
+.verde {background-color: #5cb85c;}
+.verde:hover {background-color: #60c360;}
+.verde span {color: #509e50;}
+.azul {background-color: #428bca;}
+.azul:hover {background-color: #428bca;}
+.azul span {color: #3a7ab3;}
+.naranja {background-color: #ca6242;}
+.naranja:hover {background-color: #dd6b48;}
+.naranja span {color: #b8583b;}
+
+.titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.titulo span {
+    font-size: 20px;
+}
+
+.formulario {
+    padding: 20px 20px 40px;
+}
+
+/* You can add global styles to this file, and also import other style files */
+.formulario2 {
+    border: 1px solid grey;
+    box-shadow: 3px 3px 3px grey;
+    padding: 20px;
+}
+
+.row {
+    margin-top: 10px;
+}
+
+.radiobotones {
+    padding: 26px;
+}
+
+.valido {
+    color: green;
+}
+
+.no-valido {
+    color: crimson;
+}
+
+.verde {
+    color: green;
+}
+
+.carmesi {
+    color: crimson;
+}
+
+.tabla-facturas th:nth-child(1),
+.tabla-factura th:nth-child(1) {
+    width: 45%;
+}
+
+.tabla-facturas th:nth-child(2),
+.tabla-factura th:nth-child(2) {
+    width: 20%;
+}
+
+.tabla-facturas th:nth-child(3),
+.tabla-facturas th:nth-child(3) {
+    text-align: right;
+    width: 20%;
+}
+
+.tabla-facturas th:nth-child(4),
+.tabla-factura th:nth-child(4) {
+    text-align: right;
+    width: 15%;
+}
+
+.barra-fija {
+    width: 100px;
+    height: calc(100vh - 56px);
+    background-color: rgb(70, 70, 70);
+    position: fixed;
+    top: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.barra-fija div {
+    color: rgb(194, 194, 194);
+    font-size: 50px;
+    transition: color 500ms ease-in-out;
+}
+
+.barra-fija div:hover {
+    color: rgb(233, 233, 233);
+    cursor: pointer;
+}
+
+.barra-fija div:first-child {
+    margin-top: 10px;
+}
+
+.col-md-12 {
+    width: calc(100% - 100px);
+    margin-left: 100px;
+}
+
+.breadcrumb, .autenticacion {
+    margin-top: 80px;
+}
+
+.sesion {
+    display: flex;
+    align-items: center;
+}
+
+.sesion span {
+    color: rgb(102, 102, 102);
+    font-size: 22px;
+    margin-right: 10px;
+}
+
+.cabecera {
+    display: flex;
+    width: 100%;
+}
+
+.cabecera .campo {
+    margin: 0px 5px;
+    height: 40px;
+}
+
+.cabecera .campo:nth-child(1) { width: 30%; }
+.cabecera .campo:nth-child(2) { width: 30%; }
+.cabecera .campo:nth-child(3) { width: 30%; }
+.cabecera .campo:nth-child(4) { 
+    width: 10%;
+}
+
+.cabecera .campo p {
+    font-weight: bold;
+    padding-left: 4px;
+}
+
+.fila {
+    display: flex;
+    width: 100%;
+}
+
+.fila .campo {
+    margin: 5px;
+    height: 40px;
+    border-bottom: 1px solid lightgray;
+}
+
+.fila .campo p {
+    margin: 5px;
+    height: 40px;
+    border-bottom: 1px solid lightgray;
+}
+
+.fila .campo:nth-child(1) { width: 20%; }
+.fila .campo:nth-child(2) { width: 30%; }
+.fila .campo:nth-child(3) { width: 30%; }
+.fila .campo:nth-child(4) { 
+    width: 20%;
+    border-bottom: none; 
+}
+
+.fila .nuevo {
+    margin: 5px;
+    height: 40px;
+    border-bottom: 1px solid lightgray;
+}
+
+.fila .nuevo:nth-child(1) { width: 20%; }
+.fila .nuevo:nth-child(2) { width: 20%; }
+.fila .nuevo:nth-child(3) { width: 20%; }
+.fila .nuevo:nth-child(4) { 
+    width: 20%; 
+    border-bottom: 2px solid crimson;
+}
+.fila .nuevo:nth-child(5) { 
+    width: 20%;
+    border-bottom: none; 
+}
+
+form.fila:first-child(1) {
+    margin-bottom: 40px;
+}
+
+.fila input {
+    width: 100%;
+    margin: 0;
+    height: 40px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid lightgray;
+}
+
+.fila input:focus {
+    outline: none;
+    border-bottom: 2px solid crimson;
+}
+
+.fila select {
+    height: 40px;
+}
+
+.fila.editable .campo {
+    margin: 5px;
+    height: 40px;
+    border-bottom: 1px solid lightgray;
+}
+
+.fila.editable .campo:nth-child(1) { width: 30%; }
+.fila.editable .campo:nth-child(2) { width: 30%; }
+.fila.editable .campo:nth-child(3) { 
+    width: 30%; 
+    border-bottom: none;
+}
+.fila.editable .campo:nth-child(4) { 
+    width: 10%; 
+    border-bottom: none;
+}
+
+.fila.editable input {
+    padding-bottom: 17px;
+}
+
+.fila.editable select {
+    width: 100%;
+}
+
+.paginacion {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.paginacion button {
+    margin: 0 5px;
+}

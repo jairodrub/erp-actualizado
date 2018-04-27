@@ -1,0 +1,80 @@
+<div class="barra-fija">
+  <div title="Proveedores" routerLink="/listado-proveedores">
+    <!-- Lo metemos para que vaya a proveedores -->
+    <i class="fas fa-address-book"></i>
+  </div>
+  <div title="Facturas" routerLink="/listado-facturas">
+    <!-- Lo metemos para que vaya a facturas -->
+    <i class="fas fa-money-bill-alt"></i>
+  </div>
+</div>
+<div class="col-md-12">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+      <li class="breadcrumb-item"><a routerLink="/compras">Compras</a></li>
+      <li class="breadcrumb-item"><a routerLink="/listado-proveedores">Proveedores</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Añadir proveedor</li>
+    </ol>
+  </nav>
+</div>
+<div class="col-md-12 titulo">
+  <span>Añadir nuevo proveedor</span>
+  <button class="btn btn-primary" routerLink="/listado-proveedores">
+    Volver
+  </button>
+</div>
+
+<!-- FORMULARIO -->
+
+
+<div class="col-md-8 offset-md-2 col-12"> <!-- Esta clase es de Bootstrap -->
+  <div class="formulario2"> <!-- Creamos esta clase para poner borde al formulario -->
+  <h1>Crear proveedor</h1>
+  <form [formGroup]="proveedorForm" (ngSubmit)="crearProv()">
+    <div class="form-group"> <!-- Los campos en Bootstrap van todos con esta clase -->
+      <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre">
+    </div>
+    <div class="form-group"> 
+      <input type="text" class="form-control" ngModel formControlName="cif" placeholder="CIF" #cif>
+    </div>
+    <div class="form-group"> 
+      <input type="text" class="form-control" formControlName="domicilio" placeholder="Dirección">
+    </div>
+    <div class="form-group"> 
+      <input type="number" class="form-control" formControlName="cp" placeholder="Código Postal">
+    </div>
+    <div class="form-group"> 
+      <input type="text" class="form-control" formControlName="localidad" placeholder="Localidad">
+    </div>
+    <div class="form-group"> 
+      <!-- <label for="provincia">Provincia</label> -->
+      <select class="form-control" formControlName="provincia">
+        <option *ngFor="let provincia of provincias" [value]="provincia" [ngClass]="{bandera: provincia === 'Gibraltar'}"> <!-- Estos corchetes lo que hacen es decir 
+                                                                          que el atributo de value es un objeto de Javascript. 
+                                                                          Cuando llega ahí coge el valor de la varible provincia -->
+          {{provincia}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group"> 
+      <input type="text" class="form-control" formControlName="telefono" placeholder="Teléfono">
+    </div>
+    <div class="form-group"> 
+      <input type="email" class="form-control"  formControlName="email" placeholder="E-mail">
+    </div>
+    <div class="form-group"> 
+      <input type="text" class="form-control" formControlName="contacto" placeholder="Contacto">
+    </div>
+    <button type="submit" class="btn btn-primary">
+      <span *ngIf="!enviando">Añadir proveedor</span>
+      <span *ngIf="enviando">
+      <i class="fas fa-spinner fa-pulse"></i>
+      </span>
+    </button>
+    <button routerLink="/listado-proveedores" class="btn btn-danger">Cancelar</button>
+  </form>
+  <p class="alert alert-warning" [@alerta]="estadoAlerta">{{mensaje}}</p>
+</div>  
+</div>
+

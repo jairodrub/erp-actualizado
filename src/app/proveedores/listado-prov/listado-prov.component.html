@@ -1,0 +1,99 @@
+<div class="barra-fija">
+  <div title="Proveedores" routerLink="/listado-proveedores">
+    <!-- Lo metemos para que vaya a proveedores -->
+    <i class="fas fa-address-book"></i>
+  </div>
+  <div title="Facturas" routerLink="/listado-facturas">
+    <!-- Lo metemos para que vaya a facturas -->
+    <i class="fas fa-money-bill-alt"></i>
+  </div>
+</div>
+<div class="col-md-12">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+      <li class="breadcrumb-item"><a routerLink="/compras">Compras</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Proveedores</li>
+    </ol>
+  </nav>
+</div>
+<div class="col-md-12 titulo">
+  <span>Proveedores</span>
+  <span class="alert alert-warning"
+    [@alerta]="estadoAlerta">{{mensaje}}
+  </span>
+  <button class="btn btn-primary" routerLink="/crear-proveedor"
+   *ngIf="autenticacionService.getPermProveedores()">
+    <i class="fas fa-plus-circle"></i>
+  </button>
+</div>
+<div class="container">
+  <table class="table table-bordered table-stripped">
+    <tr>
+      <th>Nombre</th>
+      <th>CIF</th>
+      <th>Localidad</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let proveedor of proveedores">
+      <td>{{proveedor.nombre}}</td>
+      <td>{{proveedor.cif}}</td>
+      <td>{{proveedor.localidad}}</td>
+      <td>
+        <button class="btn btn-success" 
+        routerLink="/editar-proveedor/{{proveedor._id}}">
+        <span *ngIf="autenticacionService.getPermProveedores()">
+            <i class="fas fa-pen-square"></i>
+        </span>
+        <span *ngIf="!autenticacionService.getPermProveedores()">
+            <i class="fas fa-eye"></i>
+        </span>
+       </button> <!-- Ruta dinámica -->
+        <!-- En mongo se almacena con guión bajo -->
+
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"
+(click)="obtenerId(proveedor._id)" *ngIf="autenticacionService.getPermProveedores()">
+  <i class="fas fa-trash-alt"></i>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          <i class="fas fa-exclamation-triangle"></i>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro de eliminar el proveedor?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            (click)="borrarProveedor()">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+      </td>
+    </tr>
+  </table>
+  <div class="paginacion">
+    <button class="btn btn-primary"
+            (click)="setDesde(-5)">
+      <i class="fas fa-arrow-circle-left"></i>
+    </button>
+    <button class="btn btn-primary"
+            (click)="setDesde(5)">
+      <i class="fas fa-arrow-circle-right"></i>
+    </button>
+  </div>
+</div>
+

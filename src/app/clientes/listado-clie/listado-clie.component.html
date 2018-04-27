@@ -1,0 +1,81 @@
+<div class="barra-fija">
+  <div title="Clientes" routerLink="/listado-clientes">
+    <!-- Lo metemos para que vaya a clientes -->
+    <i class="fas fa-address-book"></i>
+  </div>
+  <div title="Presupuestos" routerLink="/listado-presupuestos">
+    <!-- Lo metemos para que vaya a presupuestos -->
+    <i class="fas fa-money-bill-alt"></i>
+  </div>
+</div>
+<div class="col-md-12">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+      <li class="breadcrumb-item"><a routerLink="/compras">Ventas</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Clientes</li>
+    </ol>
+  </nav>
+</div>
+<div class="col-md-12 titulo">
+  <span>Clientes</span>
+  <span class="alert alert-warning"
+    [@alerta]="estadoAlerta">{{mensaje}}
+  </span>
+  <button class="btn btn-primary" routerLink="/crear-cliente">
+    <i class="fas fa-plus-circle"></i>
+  </button>
+</div>
+<div class="col-md-12">
+  <table class="table table-bordered table-stripped">
+    <tr>
+      <th>Nombre</th>
+      <th>CIF</th>
+      <th>Localidad</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let cliente of clientes">
+      <td>{{cliente.nombre}}</td>
+      <td>{{cliente.cif}}</td>
+      <td>{{cliente.localidad}}</td>
+      <td>
+        <button class="btn btn-success" 
+        routerLink="/editar-cliente/{{cliente._id}}">
+      <i class="fas fa-pen-square"></i> </button> <!-- Ruta dinámica -->
+        <!-- En mongo se almacena con guión bajo -->
+
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"
+(click)="obtenerId(cliente._id)">
+  <i class="fas fa-trash-alt"></i>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          <i class="fas fa-exclamation-triangle"></i>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro de eliminar el cliente?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            (click)="borrarCliente()">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+      </td>
+    </tr>
+  </table>
+</div>

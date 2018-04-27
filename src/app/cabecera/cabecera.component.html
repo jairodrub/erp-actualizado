@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light mb-4">
+  <a class="navbar-brand" routerLink="/">ERP App</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" 
+  data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" 
+  aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav ml-auto">
+      <div class="sesion">
+        <span *ngIf="autenticacionService.nombre">
+          <i class="fas fa-user-circle"></i>
+          {{autenticacionService.nombre}}
+        </span>
+        <button *ngIf="!getLogged()"
+          class="btn btn-primary" routerLink="/inicio-sesion">
+          Iniciar sesión
+        </button>
+        <button *ngIf="getLogged()"
+          class="btn btn-primary" (click)="crearSesion(); autenticacionService.logout();">
+          Cerrar sesión
+        </button>
+      </div>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,162 @@
+<div class="barra-fija">
+  <div title="Proveedores" routerLink="/listado-proveedores">
+    <!-- Lo metemos para que vaya a proveedores -->
+    <i class="fas fa-address-book"></i>
+  </div>
+  <div title="Facturas" routerLink="/listado-facturas">
+    <!-- Lo metemos para que vaya a facturas -->
+    <i class="fas fa-money-bill-alt"></i>
+  </div>
+</div>
+<div class="col-md-12">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+      <li class="breadcrumb-item"><a routerLink="/compras">Compras</a></li>
+      <li class="breadcrumb-item"><a routerLink="/listado-facturas">Facturas</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Editar factura</li>
+    </ol>
+  </nav>
+</div>
+<div class="col-md-12 titulo">
+  <span>Editar factura</span>
+  <button class="btn btn-primary" routerLink="/listado-facturas">
+    Volver
+  </button>
+</div>
+
+  <!-- FORMULARIO -->
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="formulario">
+        <h3>Editar factura de proveedor</h3>
+        <form [formGroup]="facturaForm" (ngSubmit)="editarFra()"> <!-- Así creamos el objeto del formulario -->
+          <div class="row">
+            <div class="col-md-6">
+                <label for="proveedor">Proveedor</label>
+                <!-- <span *ngIf="facturaForm.controls.proveedor.valid && facturaForm.controls.proveedor.dirty">
+                <i class="fas fa-check-circle verde"></i>
+                </span>
+                <span class="carmesi" *ngIf="facturaForm.controls.proveedor.invalid && facturaForm.controls.proveedor.touched">
+                  <i class="fas fa-times-circle"></i>
+                    Campo obligatorio
+                </span> -->
+              <input type="text" class="form-control" formControlName="proveedor"  
+              placeholder="Proveedor" [(ngModel)]="factura.proveedor">
+            </div>
+            <div class="col-md-6">
+                <label for="cif">CIF</label>
+                <!-- <span *ngIf="facturaForm.controls.cif.valid && facturaForm.controls.cif.dirty && cif">
+                <i class="fas fa-check-circle verde"></i>
+                </span>
+                <span class="carmesi" *ngIf="facturaForm.controls.cif.invalid && 
+                                            facturaForm.controls.cif.touched && 
+                                            !facturaForm.value.cif">
+                    <i class="fas fa-times-circle"></i>
+                      Campo obligatorio
+                    </span>
+                  <span class="carmesi" *ngIf="facturaForm.controls.cif.invalid && 
+                                                facturaForm.controls.cif.dirty && 
+                                                facturaForm.value.cif 
+                                                && cif">
+                    <i class="fas fa-times-circle"></i>
+                      El Campo debe tener 9 caracteres
+                  </span>
+                  <span class="carmesi" *ngIf="!cif && facturaForm.value.cif">
+                  <i class="fas fa-times-circle"></i>
+                    El CIF debe comenzar por A o B mayúsculas
+                  </span> -->
+              <input type="text" class="form-control" formControlName="cif" 
+              placeholder="CIF" [(ngModel)]="factura.cif" maxlength="9">
+            </div> 
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <label for="fecha">Fecha factura</label>
+              <input type="date" class="form-control" formControlName="fecha"
+              placeholder="Fecha" [(ngModel)]="factura.fecha">
+            </div>
+            <div class="col-md-8">
+              <label for="concepto">Concepto</label>
+              <input type="text" class="form-control" formControlName="concepto"
+              placeholder="Concepto" [(ngModel)]="factura.concepto">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+                <label for="base">Base Imponible</label>
+                <!-- <span *ngIf="facturaForm.controls.base.valid && facturaForm.controls.base.dirty">
+                  <i class="fas fa-check-circle verde"></i>
+                </span>
+                <span class="carmesi" *ngIf="facturaForm.controls.base.invalid && 
+                            facturaForm.controls.base.touched && 
+                            !base">
+                <i class="fas fa-times-circle"></i>
+                Campo obligatorio
+                </span>
+                <span class="carmesi" *ngIf="facturaForm.controls.base.invalid && facturaForm.controls.base.dirty
+                                            && base">
+                    <i class="fas fa-times-circle"></i>
+                      No puede superar 100.000,00
+                </span> -->
+              <input type="number" class="form-control" formControlName="base"
+              placeholder="Base" [(ngModel)]="factura.base">
+            </div>
+            <div class="col-md-4">
+              <div class="radiobotones">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" [value]="true" formControlName="retencion"
+                  placeholder="Retencion" [(ngModel)]="factura.retencion">
+                  <label class="form-check-label">
+                    Con Retención IRPF
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" [value]="false" formControlName="retencion"
+                  placeholder="Retencion" [(ngModel)]="factura.retencion">
+                  <label class="form-check-label">
+                    Sin Retención IRPF
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <select class="form-control" formControlName="tipo" 
+              placeholder="Tipo" [(ngModel)]="facturaForm.value.tipo">
+                <option value="0">0 %</option>
+                <option value="0.04">4 %</option>
+                <option value="0.1">10 %</option>
+                <option value="0.21">21 %</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4" *ngIf="!retencion"></div>
+              <div class="col-md-4" *ngIf="retencion">
+              <label for="total">Retención IRPF</label>
+              <input type="text" class="form-control" formControlName="irpf"
+              placeholder="Irpf" [(ngModel)]="facturaForm.value.irpf">
+            </div>
+            <div class="col-md-4">
+              <label for="total">Importe IVA</label>
+              <input type="text" class="form-control" formControlName="importe"
+              placeholder="Importe" [(ngModel)]="facturaForm.value.importe">
+            </div>
+            <div class="col-md-4">
+              <label for="total">Total factura IVA incluido</label>
+              <input type="text" class="form-control" formControlName="total"
+              placeholder="Total" [(ngModel)]="facturaForm.value.total">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button type="submit" class="btn btn-primary" [disabled]="facturaForm.invalid">
+                Guardar cambios
+              </button>
+            </div>
+          </div>  
+        </form>
+      </div>
+    </div>
+  </div>
