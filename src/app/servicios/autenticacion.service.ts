@@ -12,9 +12,12 @@ export class AutenticacionService {
   token: string;
   nombre: string;
   rol: string;
+  ultimoLogin:any;
 
   constructor(private http: HttpClient, private router: Router) {
     this.cargarCredenciales();
+    this.cargarInicioSesion();
+    console.log(this.ultimoLogin);
    }
 
    getUsuarios(){ // Cuando sea llamado desde componentes ejecutará el contenido que está ahí
@@ -56,6 +59,7 @@ export class AutenticacionService {
                     .map( (resp:any) => {
                       this.guardarCredenciales(resp.token, resp.nombre, resp.rol); 
                       // token el numero largo de antes (encriptación)
+                      this.guardarInicioSesion();
                       return resp;
                     });
   }
@@ -67,6 +71,13 @@ export class AutenticacionService {
     this.token = token;
     this.nombre = nombre;
     this.rol = rol;
+  }
+
+  guardarInicioSesion(){
+    var inicioSesion = new Date();
+    localStorage.setItem('ultimoLogin', JSON.stringify(inicioSesion));
+    // Convierte a una cadena JSON
+    this.ultimoLogin = inicioSesion;
   }
 
   cargarCredenciales(){
@@ -81,6 +92,14 @@ export class AutenticacionService {
     }
   }
 
+  cargarInicioSesion(){
+    if(localStorage.getItem('ultimoLogin')){
+      this.ultimoLogin = JSON.parse ( localStorage.getItem('ultimoLogin'))
+    } else {
+      this.ultimoLogin = '';
+    }
+  }
+
   isLogged(){
     return ( this.token.length > 0 ) ? true : false; // Si existe... En ese caso...
   }
@@ -92,6 +111,7 @@ export class AutenticacionService {
     this.token = '';
     this.nombre = ''; // Para que borre también el nombre al cerrar sesión
     this.rol = '';
+    this.ultimoLogin = '';
     this.router.navigate(['/']);
   }
 
