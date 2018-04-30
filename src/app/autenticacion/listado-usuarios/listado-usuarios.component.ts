@@ -35,6 +35,7 @@ export class ListadoUsuariosComponent implements OnInit {
   mensaje:string = "Error de conexión al servidor";
   editarFila:string;
   id:string;
+  online:any = [];
 
   constructor(private autenticacionService: AutenticacionService,
               private cuf: FormBuilder, //crear usuario form
@@ -71,6 +72,19 @@ export class ListadoUsuariosComponent implements OnInit {
     this.autenticacionService.getUsuarios()
                              .subscribe((res:any)=>{
                                this.usuarios = res.usuarios;
+                               this.usuarios.forEach(usuario => {
+                                this.autenticacionService.getSesiones(usuario.nombre)
+                                .subscribe((resp:any)=>{
+                                  if(resp.sesiones.length % 2 === 0) { // 0 cuando sea par (offline)
+                                    this.online.push(true);
+                                  } else {
+                                    this.online.push(false);
+                                  }
+                                  console.log(this.online);
+                                },(error)=>{
+                                  console.log(error)
+                                })
+                               });
                              },(error)=>{
                                console.log(error);
                              })
@@ -154,6 +168,19 @@ export class ListadoUsuariosComponent implements OnInit {
               }, 3000)
   }
 
+  getOnline(nombre){ // (nombre) para que no proteste
+    this.autenticacionService.getSesiones(nombre)
+                             .subscribe((resp:any)=>{
+                               if(resp.sesiones.length % 2 === 0) { // 0 cuando sea par (offline)
+                                return true;
+                               } else {
+                                  return false;
+                               }
+                             },(error)=>{
+                               console.log(error)
+                             })
+  }
+
   guardarUsuarioEditado(){
     const guardarUsuarioEditado = {
       nombre: this.editarUsuarioForm.get('nombre').value,
@@ -191,3 +218,4 @@ export class ListadoUsuariosComponent implements OnInit {
                           
   }
 }
+

@@ -18,6 +18,7 @@
     <tr>
       <th>Nombre</th>
       <th>Login/Logout</th>
+      <th>Duración</th>
     </tr>
     <tr *ngFor="let sesion of sesiones">
       <td>{{sesion.nombre}}</td>
@@ -33,6 +34,7 @@
           <i class="fas fa-sign-out-alt no-valido"></i>
         </span>
       </td>
+      <td>{{sesion.duracion}}</td>
     </tr>
   </table>
 </div>
