@@ -14,12 +14,12 @@
       <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
       <li class="breadcrumb-item"><a routerLink="/compras">Ventas</a></li>
       <li class="breadcrumb-item"><a routerLink="/listado-clientes">Clientes</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Añadir cliente</li>
+      <li class="breadcrumb-item active" aria-current="page">Editar cliente</li>
     </ol>
   </nav>
 </div>
 <div class="col-md-12 titulo">
-  <span>Añadir nuevo cliente</span>
+  <span>Editar nuevo cliente</span>
   <button class="btn btn-primary" routerLink="/listado-clientes">
     Volver
   </button>
@@ -30,8 +30,8 @@
   
   <div class="col-md-8 offset-md-2 col-12"> <!-- Esta clase es de Bootstrap -->
     <div class="formularios"> <!-- Creamos esta clase para poner borde al formulario -->
-    <h1>Crear cliente</h1>
-    <form [formGroup]="clienteForm" (ngSubmit)="editarProv()">
+    <h1>Editar cliente</h1>
+    <form [formGroup]="clienteForm" (ngSubmit)="editarCliente()">
       <div class="form-group"> <!-- Los campos en Bootstrap van todos con esta clase -->
         <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre"
         [(ngModel)]="cliente.nombre">

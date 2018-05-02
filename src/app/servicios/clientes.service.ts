@@ -11,8 +11,8 @@ export class ClientesService {
 
   constructor(private http: HttpClient) { }
 
-  getClientes(){ // Cuando sea llamado desde componentes ejecutará el contenido que está ahí
-    let url = 'http://localhost:3000/cliente';
+  getClientes(nombre){ // Cuando sea llamado desde componentes ejecutará el contenido que está ahí
+    let url = 'http://localhost:3000/cliente/' + nombre;
     return this.http.get(url) // cuando llamemos a getClientes ejecuta este resultado
                     .map( (resp:any) => { // Con la flecha deja de protestar
                           //la tipamos con any para que no proteste (angular)

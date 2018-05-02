@@ -82,7 +82,7 @@ crearClie(){ // Hay que engancharlo con un backend
 }
 
 guardarClie(){
-  const guardarProv = {
+  const guardarClie = {
     nombre: this.clienteForm.get('nombre').value,
     cif: this.clienteForm.get('cif').value,
     domicilio: this.clienteForm.get('domicilio').value,
@@ -93,6 +93,6 @@ guardarClie(){
     email: this.clienteForm.get('email').value,
     contacto: this.clienteForm.get('contacto').value,
   }
-  return guardarProv;
+  return guardarClie;
 }
 }

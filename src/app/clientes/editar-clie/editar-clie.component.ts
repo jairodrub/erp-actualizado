@@ -48,22 +48,21 @@ export class EditarClieComponent implements OnInit {
 
   cargarCliente(id){ // Lo necesitamos inmediatamente para tener los datos actualizados del cliente
     this.clientesService.getClienteId(id)
-                           .subscribe((res:any)=>{
-                             this.cliente = res.clientes; // res respuesta
-                             console.log(this.cliente);
-                           })
+                        .subscribe((res:any)=>{
+                          this.cliente = res.cliente; // res respuesta
+                        })
   }
 
-  editarProv(){
-    this.cliente = this.guardarProv();
+  editarCliente(){
+    this.cliente = this.guardarCliente();
     this.clientesService.putCliente(this.id, this.cliente)
-                           .subscribe((res:any)=>{
-                            this.router.navigate(['/listado-clientes'])
-                           })
+                        .subscribe((res:any)=>{
+                          this.router.navigate(['/listado-clientes']);
+                        })
   }
 
-  guardarProv(){
-    const guardarProv = {
+  guardarCliente(){
+    const guardarCliente = {
       nombre: this.clienteForm.get('nombre').value,
       cif: this.clienteForm.get('cif').value,
       domicilio: this.clienteForm.get('domicilio').value,
@@ -72,8 +71,9 @@ export class EditarClieComponent implements OnInit {
       provincia: this.clienteForm.get('provincia').value,
       telefono: this.clienteForm.get('telefono').value,
       email: this.clienteForm.get('email').value,
-      contacto: this.clienteForm.get('contacto').value,
+      contacto: this.clienteForm.get('contacto').value
     }
-    return guardarProv;
+    return guardarCliente;
   }
+
 }

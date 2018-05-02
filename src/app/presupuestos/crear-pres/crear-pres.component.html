@@ -1,3 +1,169 @@
-<p>
-  crear-pres works!
-</p>
+<div class="barra-fija">
+    <div title="Proveedores" routerLink="/listado-proveedores">
+      <!-- Lo metemos para que vaya a proveedores -->
+      <i class="fas fa-address-book"></i>
+    </div>
+    <div title="Presupuestos" routerLink="/listado-presupuestos">
+      <!-- Lo metemos para que vaya a presupuestos -->
+      <i class="fas fa-money-bill-alt"></i>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/inicio">Inicio</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a routerLink="/compras">Compras</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a routerLink="/listado-presupuestos">Presupuestos</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Añadir presupuesto</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="col-md-12 titulo">
+    <span>Añadir nueva presupuesto</span>
+    <button class="btn btn-primary" routerLink="/listado-presupuestos">
+      <strong>Volver</strong>
+    </button>
+  </div>
+  <div class="col-md-8 offset-md-2 col-12">
+    <div class="formulario">
+      <form [formGroup]="presupuestoForm" (ngSubmit)="crearPres()">
+        <div class="row">
+            <div class="col-md-6">
+              <label for="proveedor">Proveedor</label>
+              <span *ngIf="presupuestoForm.controls.proveedor.valid && presupuestoForm.controls.proveedor.dirty">
+              <i class="fas fa-check-circle verde"></i>
+              </span>
+              <span class="carmesi" *ngIf="presupuestoForm.controls.proveedor.invalid && presupuestoForm.controls.proveedor.touched">
+                <i class="fas fa-times-circle"></i>
+                  Campo obligatorio
+              </span>
+              <input type="text" class="form-control"
+                    formControlName="proveedor" autofocus
+                    #proveedor>
+            </div>
+  
+            <div class="col-md-6">
+              <label for="cif">CIF</label>
+              <span *ngIf="presupuestoForm.controls.cif.valid && presupuestoForm.controls.cif.dirty && cif">
+              <i class="fas fa-check-circle verde"></i>
+              </span>
+              <span class="carmesi" *ngIf="presupuestoForm.controls.cif.invalid && 
+                                          presupuestoForm.controls.cif.touched && 
+                                          !presupuestoForm.value.cif">
+                  <i class="fas fa-times-circle"></i>
+                    Campo obligatorio
+                  </span>
+                <span class="carmesi" *ngIf="presupuestoForm.controls.cif.invalid && 
+                                              presupuestoForm.controls.cif.dirty && 
+                                              presupuestoForm.value.cif 
+                                              && cif">
+                  <i class="fas fa-times-circle"></i>
+                    El Campo debe tener 9 caracteres
+                </span>
+                <span class="carmesi" *ngIf="!cif && presupuestoForm.value.cif">
+                <i class="fas fa-times-circle"></i>
+                  El CIF debe comenzar por A o B mayúsculas
+                </span>
+              <input type="text" class="form-control"
+                    formControlName="cif"
+                    [(ngModel)]="presupuestoForm.value.cif" maxlength="9"> <!-- Enlazamos bidireccionalmente el campo con el componente -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <label for="fecha">Fecha presupuesto</label>
+              <input type="date" class="form-control"
+                    formControlName="fecha">
+            </div>
+            <div class="col-md-8">
+              <label for="concepto">Concepto</label>
+              <input type="text" class="form-control"
+                    formControlName="concepto">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <label for="base">Base Imponible</label>
+              <span *ngIf="presupuestoForm.controls.base.valid && presupuestoForm.controls.base.dirty">
+                <i class="fas fa-check-circle verde"></i>
+              </span>
+              <span class="carmesi" *ngIf="presupuestoForm.controls.base.invalid && 
+                          presupuestoForm.controls.base.touched && 
+                          !base">
+              <i class="fas fa-times-circle"></i>
+              Campo obligatorio
+              </span>
+              <span class="carmesi" *ngIf="presupuestoForm.controls.base.invalid && presupuestoForm.controls.base.dirty
+                                          && base">
+                  <i class="fas fa-times-circle"></i>
+                    No puede superar 100.000,00
+              </span>
+              <input type="number" class="form-control"
+                    formControlName="base">
+            </div>
+            <div class="col-md-4 radiobotones">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio"  [value]="true" formControlName="retencion">
+                  <label class="form-check-label">
+                    Con Retención IRPF
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" [value]="false" formControlName="retencion">
+                  <label class="form-check-label">
+                    Sin Retención IRPF
+                  </label>
+                </div>
+            </div>
+            <div class="col-md-4">
+              <label for="tipo">% IVA</label>
+              <select class="form-control" formControlName="tipo">
+                <option value=0>0 %</option>
+                <option value=0.04>4 %</option>
+                <option value=0.1>10 %</option>
+                <option value=0.21>21 %</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4" *ngIf="!retencion"></div>
+            <div class="col-md-4" *ngIf="retencion">
+              <label for="irpf">Retención IRPF</label>
+              <input type="text" class="form-control" 
+                    formControlName="irpf"
+                    [(ngModel)]="presupuestoForm.value.irpf" readonly> <!-- Pinta el resultado -->
+            </div>
+            <div class="col-md-4">
+              <label for="importe">Importe IVA</label>
+              <input type="text" class="form-control" 
+                    formControlName="importe"
+                    [(ngModel)]="presupuestoForm.value.importe" readonly> <!-- Pinta el resultado -->
+            </div>
+            <div class="col-md-4">
+              <label for="total">Total presupuesto IVA incluido</label>
+              <input type="text" class="form-control"
+                    formControlName="total"
+                    [(ngModel)]="presupuestoForm.value.total"
+                    readonly>
+            </div>
+          </div>
+        <button type="submit" class="btn btn-primary" [disabled]="presupuestoForm.invalid || !cif">
+          <span *ngIf="!enviando">Añadir presupuesto</span>
+          <span *ngIf="enviando">
+            <i class="fas fa-spinner fa-pulse"></i>
+          </span>
+        </button>
+        <button routerLink="/listado-presupuestos" class="btn btn-danger">
+            Cancelar
+          </button>
+      </form>
+      <p class="alert alert-warning"
+          [@alerta]="estadoAlerta">{{mensaje}}</p>
+    </div>
+  </div>
