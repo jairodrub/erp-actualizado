@@ -85,6 +85,7 @@ export class ListadoClieComponent implements OnInit {
     }
 
     crearConsulta(){
+      this.mensaje = false;
       this.buscando = true;
       this.consulta = this.guardarConsulta();
       this.clientesService.getClientesNombreLocalidad(this.consulta)
@@ -94,6 +95,7 @@ export class ListadoClieComponent implements OnInit {
                             if(this.clientes.length === 0){
                               this.mensaje = true;
                             }
+                            this.buscadorLocalidadNombre.reset();
                           },(error)=>{ // Error
                             this.buscando = false;
                             console.log(error);
