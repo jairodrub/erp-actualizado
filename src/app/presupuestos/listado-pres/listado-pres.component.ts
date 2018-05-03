@@ -1,15 +1,67 @@
 import { Component, OnInit } from '@angular/core';
+import { PresupuestosService } from '../../servicios/presupuestos.service';
+import { trigger, state, style, animate, transition } from '@angular/animations'; // Animaciones
 
 @Component({
   selector: 'app-listado-pres',
   templateUrl: './listado-pres.component.html',
-  styleUrls: ['./listado-pres.component.css']
+  styleUrls: ['./listado-pres.component.css'],
+  animations: [
+    trigger('alerta', [ // alerta la hemos definido en HTML antes
+      state('show', style({opacity: 1})), // El estado en el que está
+      state('hide', style({opacity: 0})),
+      transition('show => hide', animate('500ms ease-out')), // Cuando pasemos de show a hide...
+      transition('hide => show', animate('500ms ease-in')) // Cuando pasemos de hide a show...
+    ]) 
+  ]// Lleva un array por si lleva varias animaciones
 })
 export class ListadoPresComponent implements OnInit {
 
-  constructor() { }
+  mensaje: string;
+  mostrarAlerta:boolean = false;
+  presupuestos:any; //proveedores
+  proveedores:any;
+  id:string;
+
+  constructor(private presupuestosService: PresupuestosService) { }
 
   ngOnInit() {
+    this.cargarPresupuestos();
   }
 
+  get estadoAlerta() { // Creamos un método
+    return this.mostrarAlerta ? 'show' : 'hide' // si no se cumple, hide (y no se ve)
+  }
+
+  cargarPresupuestos(){ // Se ejecuta cuando se ejecuta el componente en ngOnInit
+    this.presupuestosService.getPresupuestos()
+            .subscribe((resp:any)=>{ // resp es respuesta
+                this.presupuestos = resp.presupuestos; 
+
+            }, error => {
+              console.log(error);
+            })
+  }
+
+  obtenerId(id){
+    this.id = id
+  }
+  
+  borrarPresupuesto() { // quitamos el id del parentesis y lo metemos arriba
+    this.presupuestosService.deletePresupuesto(this.id)
+                           .subscribe((resp:any)=>{
+                             this.mensaje = "El presupuesto ha sido eliminado correctamente";
+                             this.mostrarAlerta = true; // En este momento mostrarAlerta es true
+                             this.cargarPresupuestos();
+                             setTimeout(()=>{ // Apaga el mensaje anterior cuando hayan pasado "x" segundos
+                              this.mostrarAlerta = false;
+                             }, 2500); // 2 segundos
+                           },(error:any)=>{
+                             this.mensaje = 'Error de conexión con el servidor';
+                             this.mostrarAlerta = true;
+                             setTimeout(()=>{
+                              this.mostrarAlerta = false;
+                            }, 2500);
+                           });
+  }
 }

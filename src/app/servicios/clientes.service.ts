@@ -12,7 +12,26 @@ export class ClientesService {
   constructor(private http: HttpClient) { }
 
   getClientes(nombre){ // Cuando sea llamado desde componentes ejecutará el contenido que está ahí
-    let url = 'http://localhost:3000/cliente/' + nombre;
+    let url = 'http://localhost:3000/cliente/nombre/' + nombre;
+    return this.http.get(url) // cuando llamemos a getClientes ejecuta este resultado
+                    .map( (resp:any) => { // Con la flecha deja de protestar
+                          //la tipamos con any para que no proteste (angular)
+                      return resp;
+                    });
+  } 
+
+  getClientesLocalidad(localidad){ // Cuando sea llamado desde componentes ejecutará el contenido que está ahí
+    let url = 'http://localhost:3000/cliente/localidad/' + localidad;
+    return this.http.get(url) // cuando llamemos a getClientes ejecuta este resultado
+                    .map( (resp:any) => { // Con la flecha deja de protestar
+                          //la tipamos con any para que no proteste (angular)
+                      return resp;
+                    });
+  } 
+  
+  getClientesNombreLocalidad(consulta){ // Cuando sea llamado desde componentes 
+                                          // ejecutará el contenido que está ahí
+    let url = 'http://localhost:3000/cliente/mixto/' + consulta.nombre + '/' + consulta.localidad;
     return this.http.get(url) // cuando llamemos a getClientes ejecuta este resultado
                     .map( (resp:any) => { // Con la flecha deja de protestar
                           //la tipamos con any para que no proteste (angular)

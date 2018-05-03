@@ -24,11 +24,63 @@
   </button>
 </div>
 <div class="col-md-12">
+  <div class="custom-control custom-radio custom-control-inline">
+    <input type="radio" id="customRadioInline1" class="custom-control-input"
+     name="customRadioInline1" (click)="buscarPorNombre()" checked>
+    <label class="custom-control-label" for="customRadioInline1">Buscar por nombre</label>
+  </div>
+  <div class="custom-control custom-radio custom-control-inline">
+    <input type="radio" id="customRadioInline2" class="custom-control-input"
+     name="customRadioInline1" (click)="buscarPorLocalidad()">
+    <label class="custom-control-label" for="customRadioInline2">Buscar por localidad</label>
+  </div>
+  <div class="custom-control custom-radio custom-control-inline">
+    <input type="radio" id="customRadioInline3" class="custom-control-input"
+      name="customRadioInline1" (click)="buscarPorNombreLocalidad()">
+    <label class="custom-control-label" for="customRadioInline3">Buscar por nombre y localidad</label>
+  </div>
+</div>
+<div class="col-md-12 buscador" *ngIf="verBuscadorNombre">
   <input type="search" class="form-control"
          placeholder="Complete el nombre"
          [formControl]="buscador">
 </div>
-<div class="col-md-12">
-  <p *ngFor="let cliente of clientes">{{cliente.nombre}}</p>
-  <p *ngIf="mensaje">No se encontraron coincidencias.</p>
+<div class="col-md-12 buscador" *ngIf="verBuscadorLocalidad">
+  <input type="search" class="form-control"
+          placeholder="Complete la localidad"
+          [formControl]="buscadorLocalidad">
+</div>
+<div class="col-md-12 buscador" *ngIf="verBuscadorNombreLocalidad">
+  <form [formGroup]="buscadorLocalidadNombre"
+        (ngSubmit)="crearConsulta()">
+    <div class="form-row">
+      <div class="col">
+          <input type="text" class="form-control"
+          placeholder="Nombre"
+          formControlName="nombre"> 
+      </div>
+      <div class="col">
+          <input type="text" class="form-control"
+          placeholder="Localidad"
+          formControlName="localidad"> 
+      </div>
+      <div class="col">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="col-md-12 resultados">
+    <div *ngIf="buscando" class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+  <p *ngFor="let cliente of clientes"
+  routerLink="/editar-cliente/{{cliente._id}}">{{cliente.nombre}} | {{cliente.localidad}}</p>
+  <span *ngIf="mensaje">No se encontraron coincidencias.</span>
 </div>
