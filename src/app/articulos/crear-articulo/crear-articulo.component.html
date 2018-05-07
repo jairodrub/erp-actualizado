@@ -1,0 +1,58 @@
+<div class="barra-fija">
+    <div title="Clientes" 
+          routerLink="/listado-clientes">
+        <i class="fas fa-address-book"></i>
+    </div>
+    <div title="Presupuestos" 
+          routerLink="/listado-presupuestos">
+        <i class="fas fa-money-bill-alt"></i>
+    </div>
+    <div title="Articulos" 
+        routerLink="/listado-articulos">
+      <i class="fas fa-archive"></i>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+        <li class="breadcrumb-item"><a routerLink="/ventas">Ventas</a></li>
+        <li class="breadcrumb-item"><a routerLink="/listado-articulos">Artículos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Añadir artículo</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="col-md-12 titulo">
+    <span>Añadir nuevo artículo</span>
+    <button class="btn btn-primary"
+            routerLink="/listado-articulos">
+      <strong>Volver</strong>
+    </button>
+  </div>
+  <div class="col-md-8 offset-md-2 col-12">
+    <div class="formulario">
+      <form [formGroup]="articuloForm" (ngSubmit)="crearArticulo()">
+        <div class="form-group">
+          <input type="text" class="form-control"
+                  formControlName="referencia"
+                  placeholder="Referencia">
+        </div>
+        <div class="form-group">
+          <input type="number" class="form-control"
+                  formControlName="precio"
+                  placeholder="Precio">
+        </div>
+        <button type="submit" class="btn btn-primary">
+          Añadir artículo
+        </button>
+        <button routerLink="/listado-articulos" 
+                class="btn btn-danger">
+            Cancelar
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  
+  
+  

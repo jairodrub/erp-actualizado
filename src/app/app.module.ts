@@ -32,7 +32,10 @@ import { ClientesService } from './servicios/clientes.service';
 import { PresupuestosService } from './servicios/presupuestos.service';
 import { AutenticacionGuard } from './servicios/autenticacion.guard';
 import { ListadoUsuariosComponent } from './autenticacion/listado-usuarios/listado-usuarios.component';
-import { ListadoSesionesComponent } from './autenticacion/listado-sesiones/listado-sesiones.component'
+import { ListadoSesionesComponent } from './autenticacion/listado-sesiones/listado-sesiones.component';
+import { CrearArticuloComponent } from './articulos/crear-articulo/crear-articulo.component';
+import { ListadoArticulosComponent } from './articulos/listado-articulos/listado-articulos.component';
+import { ArticulosService } from './servicios/articulos.service'
 
 const rutas: Routes =[    //Creacción de rutas. Array para enviarlo a router-outlet.  Rutas friendly según Google
   {path:'' , component: InicioComponent},
@@ -51,9 +54,11 @@ const rutas: Routes =[    //Creacción de rutas. Array para enviarlo a router-ou
   {path:'listado-clientes', component: ListadoClieComponent, canActivate: [AutenticacionGuard]},
   {path:'crear-cliente', component: CrearClieComponent, canActivate: [AutenticacionGuard]},
   {path:'editar-cliente/:id', component: EditarClieComponent, canActivate: [AutenticacionGuard]},
-  {path:'listado-presupuestos', component: EditarPresComponent, canActivate: [AutenticacionGuard]},
+  {path:'listado-presupuestos', component: ListadoPresComponent, canActivate: [AutenticacionGuard]},
   {path:'crear-presupuesto', component: CrearPresComponent, canActivate: [AutenticacionGuard]},
-  {path:'editar-presupuesto/:id', component: ListadoPresComponent, canActivate: [AutenticacionGuard]},
+  {path:'editar-presupuesto/:id', component: EditarPresComponent, canActivate: [AutenticacionGuard]},
+  {path:'listado-articulos', component: ListadoArticulosComponent, canActivate: [AutenticacionGuard]},
+  {path:'crear-articulo', component: CrearArticuloComponent, canActivate: [AutenticacionGuard]},
   {path:'**', component: InicioComponent}, // Esta es la del error
 ]
 
@@ -80,7 +85,9 @@ const rutas: Routes =[    //Creacción de rutas. Array para enviarlo a router-ou
     CrearPresComponent,
     ListadoPresComponent,
     ListadoUsuariosComponent,
-    ListadoSesionesComponent
+    ListadoSesionesComponent,
+    CrearArticuloComponent,
+    ListadoArticulosComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +96,7 @@ const rutas: Routes =[    //Creacción de rutas. Array para enviarlo a router-ou
     ReactiveFormsModule,
     BrowserAnimationsModule
   ],
-  providers: [ProveedoresService, FacturasService, AutenticacionService, ClientesService, PresupuestosService, AutenticacionGuard],
+  providers: [ProveedoresService, FacturasService, AutenticacionService, ClientesService, PresupuestosService, AutenticacionGuard, ArticulosService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
