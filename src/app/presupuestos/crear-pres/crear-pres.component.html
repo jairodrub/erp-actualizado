@@ -58,10 +58,12 @@
           <div class="form-group col-md-2">
               <label>Cantidad</label>
           </div>
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-2"
+               style= "text-align:right">
               <label>Precio</label>
           </div>
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-2"
+               style= "text-align:right">
               <label>Importe</label>
           </div>
         </div>
@@ -126,6 +128,52 @@
                     readonly>
           </div>
         </div>
+        <div class="form-row" style="margin-top: 10px;">
+          <div class="col-md-7" style="text-align: right; margin-top: 10px">
+            <label>% IVA</label>
+          </div>
+          <div class="col-md-2">
+            <select class="form-control" 
+                    formControlName="tipo"
+                    value=0.21>
+              <option value=0>0 %</option>
+              <option value=0.04>4 %</option>
+              <option value=0.1>10 %</option>
+              <option value=0.21>21 %</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input type="number" class="form-control"
+                   formControlName="iva"
+                   [(ngModel)]="formPre.value.iva"
+                   readonly>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top: 10px;">
+          <div class="col-md-9" style="text-align: right; margin-top: 10px">
+            <label>
+              Total Presupuesto IVA incluido
+            </label>
+          </div>
+          <div class="col-md-2">
+            <input type="number" class="form-control"
+                    formControlName="total"
+                    [(ngModel)]="formPre.value.total"
+                   readonly>
+            </div>
+          </div>
+          <div class="form-row" style="margin-top: 10px">
+            <div class="col-md-11" style="text-align:right">
+              <button class="btn btn-danger" routerLink="/listado-presupuestos">
+                Cancelar
+              </button>
+              <button class="btn btn-primary"
+                      (click)="crearPresupuesto()">
+              <!-- click igual que ngSubmit, pero ngSubmit con un campo -->
+                Añadir presupuesto
+              </button>
+            </div>
+          </div>
       </form>
       <pre>{{formPre.value | json}}</pre>
     </div>

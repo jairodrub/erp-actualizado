@@ -351,3 +351,7 @@ form.fila:first-child(1) {
       -webkit-transform: scaleY(1.0);
     }
   }
+
+  input[readonly] {
+      text-align: right;
+  }

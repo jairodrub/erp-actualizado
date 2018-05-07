@@ -3,6 +3,7 @@ import { FormControl, FormGroup, FormBuilder, Validators, FormArray } from '@ang
 import { PresupuestosService } from '../../servicios/presupuestos.service';
 import { ClientesService } from '../../servicios/clientes.service';
 import { ArticulosService } from '../../servicios/articulos.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class CrearPresComponent implements OnInit {
   constructor(private fp: FormBuilder, // fp formulario
               private presupuestosService: PresupuestosService,
               private clientesService: ClientesService,
-              private articulosService: ArticulosService) { }
+              private articulosService: ArticulosService,
+              private router: Router) { }
 
   ngOnInit() {
     this.cargarDatos();
@@ -33,7 +35,10 @@ export class CrearPresComponent implements OnInit {
       // Almacenamos las diferentes líneas que tiene un presupuesto
         this.initItem()
       ]),
-      suma:null
+      suma:null,
+      tipo: 0.21,
+      iva: null,
+      total: null
     })
   }
 
@@ -75,6 +80,16 @@ export class CrearPresComponent implements OnInit {
                 })
   }
 
+  redondear(valor){
+    var valor;
+    if(valor < 0) {
+        var resultado = Math.round(-valor*100)/100 * -1; // -1 para que sea negativo
+    } else {
+        var resultado = Math.round(valor*100)/100;
+    }
+    return resultado;
+  }
+
   detectarCambios(){
     this.formPre.valueChanges
                 .subscribe(valor =>{ // Como es un solo valor, quitamos ()
@@ -90,14 +105,37 @@ export class CrearPresComponent implements OnInit {
                       this.formPre.value.items[i].precio = articuloCargado.precio;
                     }
                     // articuloCargado es el que se va seleccionando en cada momento
-                    this.formPre.value.items[i].importe = valor.items[i].cantidad 
-                                          * this.formPre.value.items[i].precio;
+                    this.formPre.value.items[i].importe = this.redondear(valor.items[i].cantidad 
+                                          * this.formPre.value.items[i].precio);
                     suma += valor.items[i].importe; 
                     // De aquí se extrae el importe
                     // La i se va actualizando
                   }
                   this.formPre.value.suma = suma; // forControlName="suma" en HTML
+                  this.formPre.value.iva = this.redondear(this.formPre.value.suma * valor.tipo);
+                  this.formPre.value.total = this.redondear(this.formPre.value.suma + this.formPre.value.iva);
                 })
   }
 
+  crearPresupuesto(){
+    this.presupuesto = this.guardarPresupuesto();
+    this.presupuestosService.postPresupuesto(this.presupuesto)
+                            .subscribe((resp:any)=>{
+                              this.router.navigate(['/listado-presupuestos'])
+                            },(error)=>{
+                              console.log(error);
+                            })
+  }
+
+  guardarPresupuesto(){
+    const guardarPresupuesto = {
+      cliente: this.formPre.get('cliente').value,
+      fecha: this.formPre.get('fecha').value,
+      items: this.formPre.get('items').value,
+      suma: this.formPre.get('suma').value,
+      tipo: this.formPre.get('tipo').value,
+      iva: this.formPre.get('iva').value,
+      total: this.formPre.get('total').value,
+    }
+  }
 }
