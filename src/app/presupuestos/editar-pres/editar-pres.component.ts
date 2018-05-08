@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { PresupuestosService } from '../../servicios/presupuestos.service';
+import { ClientesService } from '../../servicios/clientes.service';
+import { ArticulosService } from '../../servicios/articulos.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
 
 @Component({
   selector: 'app-editar-pres',
@@ -11,115 +12,187 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class EditarPresComponent implements OnInit {
 
-  formPre: FormGroup;
-  presupuesto:any;
-  base:number;
-  tipo:number;
-  importe:number;
-  total:number;
-  irpf:number;
-  retencion:boolean = false;
+  formPre: FormGroup; // Propiedades
+  presupuesto:any; // Propiedades
+  clientes:any; // Propiedades
+  articulos:any; // Propiedades
   id:string;
 
-  constructor(private fp: FormBuilder,
+  constructor(private fp: FormBuilder, // fp formulario
               private presupuestosService: PresupuestosService,
+              private clientesService: ClientesService,
+              private articulosService: ArticulosService,
               private router: Router,
-              private route: ActivatedRoute) { 
-                if(!this.presupuesto){
-                  this.presupuesto = {};
+              private route: ActivatedRoute) {
+                if(!this.articulos){
+                  this.articulos = [];
                 }
-              }
-
+               }
+              
   ngOnInit() {
-    this.id = this.route.snapshot.params['id'];
-    this.cargarPresupuesto(this.id);
-    this.iniciarFormulario();
-  }
-
-  cargarPresupuesto(id){
-    this.presupuestosService.getPresupuestoId(id)
-                        .subscribe((res:any)=>{
-                          this.presupuesto = res.presupuesto;
-                          console.log(this.presupuesto);
-                        })
-  }
-
-  iniciarFormulario(){
+    this.getId(this.route.snapshot.params['id']) // route es el de private
+    this.cargarDatos();
     this.formPre = this.fp.group({
-      cliente: [ null , Validators.required ],
-      cif: ['' , [Validators.required, 
-                  Validators.minLength(9)]],
+      cliente: null,
+      cif: null,
       fecha: null,
-      concepto: null,
-      base: [null, [Validators.required, Validators.max(100000)]],
-      retencion: false,
+      items: this.fp.array([
+      // fp Formulario
+      // Almacenamos las diferentes líneas que tiene un presupuesto
+        this.initItem()
+      ]),
+      suma:null,
       tipo: 0.21,
-      irpf: null,
-      importe: null,
+      iva: null,
       total: null,
-    });
+      num:null
+    })
+  }
+
+  ngAfterViewChecked(){ // Cuando la vista del componente ya está comprobada
     this.detectarCambios();
+  }
+
+  cargarDatos(){
+    this.clientesService.getTodosClientes()
+                .subscribe((resp:any)=>{
+                  this.clientes = resp.clientes
+                }, (error)=>{
+                  console.log(error)
+                })
+    this.articulosService.getArticulo()
+                .subscribe((resp:any)=>{
+                  this.articulos = resp.articulos
+                }, (error)=>{
+                  console.log(error)
+                })
+  }
+  
+
+  getId(id){ // Primero aquí y luego a ngOnInit(), después seguimos con esto
+    this.presupuestosService.getPresupuestoId(id) // En presupuestos.service.ts
+                            .subscribe((resp:any)=>{
+                              this.presupuesto = resp.presupuesto;
+                              this.patchForm();
+                            },(error)=>{
+                              console.log(error);
+                            })
+    this.id = id; // Que this.id pase a se id
+  }
+
+  patchForm(){
+    var numero = '000' + this.presupuesto.numero + '/18';
+
+    this.formPre.patchValue({
+      cliente: this.presupuesto.cliente,
+      cif: this.presupuesto.cif,
+      fecha: this.presupuesto.fecha,
+      suma: this.presupuesto.suma,
+      tipo: this.presupuesto.tipo,
+      iva: this.presupuesto.iva,
+      total: this.presupuesto.total,
+      num: numero.slice(-7)
+    })
+    this.setPresupuestoItems();
+  }
+  
+  setPresupuestoItems(){
+    let control = <FormArray>this.formPre.controls.items;
+    this.presupuesto.items.forEach(element=>{
+      control.push(this.fp.group({ // Dentro le pasamos un objeto...
+        articulo: element.articulo,
+        cantidad: element.cantidad,
+        precio: element.precio,
+        importe: element.importe
+      }))
+    })
+    this.removeItem(0); // Crea uno de más vacío
+  }
+
+  initItem(){
+    return this.fp.group({
+      articulo: null,
+      cantidad:null,
+      precio:null,
+      importe:null,
+    })
+  }
+
+  addItem(){
+    const control = <FormArray>this.formPre.controls['items'];
+    control.push(this.initItem());
+  }
+
+  removeItem(i){
+    const control = <FormArray>this.formPre.controls['items'];
+    control.removeAt(i); // i es el índice
   }
 
   redondear(valor){
     var valor;
     if(valor < 0) {
-      var resultado = Math.round(-valor*100)/100 * -1;
+        var resultado = Math.round(-valor*100)/100 * -1; // -1 para que sea negativo
     } else {
         var resultado = Math.round(valor*100)/100;
     }
     return resultado;
   }
 
-  formatearMoneda(valor){
-    var resultado = new Intl.NumberFormat("es-ES",{style: "currency", currency: "EUR"})
-                      .format(valor);
-    return resultado;
-  }
-
   detectarCambios(){
-    this.formPre.valueChanges.subscribe(valorForm =>{
-      this.base = this.redondear(valorForm.base);
-      this.retencion = valorForm.retencion;
-      this.tipo = valorForm.tipo;
-      if(this.retencion){
-        this.irpf = this.redondear(this.base * -0.15);
-      } else {
-        this.irpf = 0;
-      }
-      this.importe = this.redondear(this.base * this.tipo);
-      this.total = this.redondear(this.base + this.irpf + this.importe);
-      this.formPre.value.irpf = this.formatearMoneda(this.irpf);
-      this.formPre.value.importe = this.formatearMoneda(this.importe);
-      this.formPre.value.total = this.formatearMoneda(this.total);
-    })
- 
-  }
+    this.formPre.valueChanges
+            .subscribe(valor =>{
+              // var nombreCliente = valor.cliente;
+              // var clienteCargado = this.clientes.find(cliente=>{
+              //   return cliente.nombre === nombreCliente;
+              // });
+              // if(clienteCargado){
+              //   this.formPre.value.cif = clienteCargado.cif;
+              // } else {
+              //   this.formPre.value.cif = '';
+              // }
+              var importe = 0;
+              var suma = 0;
+              var i;
+              for(i=0; i < valor.items.length; i++){
+                var referencia = valor.items[i].articulo;
+                var articuloCargado = this.articulos.find(function(articulo){
+                    return articulo.referencia === referencia;
+                });
+                if(articuloCargado){
+                  this.formPre.value.items[i].precio = articuloCargado.precio;     
+                  this.formPre.value.items[i].importe = this.redondear(valor.items[i].cantidad 
+                    * this.formPre.value.items[i].precio);
+                }
+                suma += valor.items[i].importe; 
+              }
+              this.formPre.value.suma = suma;
+              this.formPre.value.iva = this.redondear(this.formPre.value.suma * valor.tipo);
+              this.formPre.value.total = this.redondear(this.formPre.value.suma + this.formPre.value.iva);
+            })
+}
 
-  
-  editarPre(){
-    this.presupuesto = this.guardarPre();
+  editarPresupuesto(){
+    this.presupuesto = this.guardarPresupuesto();
     this.presupuestosService.putPresupuesto(this.id, this.presupuesto)
-    .subscribe((res:any)=>{
-      this.router.navigate(['/listado-presupuestos']);
-    })
+                            .subscribe((resp:any)=>{
+                              this.router.navigate(['/listado-presupuestos'])
+                            },(error)=>{
+                              console.log(error);
+                            })
   }
 
-  guardarPre(){
-    const guardarPre = {
+  guardarPresupuesto(){
+    const guardarPresupuesto = {
       cliente: this.formPre.get('cliente').value,
       cif: this.formPre.get('cif').value,
       fecha: this.formPre.get('fecha').value,
-      concepto: this.formPre.get('concepto').value,
-      base: this.formPre.get('base').value,
-      retencion: this.formPre.get('retencion').value,
+      items: this.formPre.get('items').value,
+      suma: this.formPre.get('suma').value,
       tipo: this.formPre.get('tipo').value,
-      irpf: this.formPre.get('irpf').value,
-      importe: this.formPre.get('importe').value,
+      iva: this.formPre.get('iva').value,
       total: this.formPre.get('total').value,
-      //fechaRegistro: new Date()
     }
-    return guardarPre;
+    return guardarPresupuesto;
   }
 
 }

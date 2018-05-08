@@ -29,6 +29,7 @@ export class CrearPresComponent implements OnInit {
     this.cargarDatos();
     this.formPre = this.fp.group({
       cliente: null,
+      cif: null,
       fecha: null,
       items: this.fp.array([
       // fp Formulario
@@ -93,6 +94,17 @@ export class CrearPresComponent implements OnInit {
   detectarCambios(){
     this.formPre.valueChanges
                 .subscribe(valor =>{ // Como es un solo valor, quitamos ()
+                  var nombreCliente = valor.cliente; 
+                  // De donde vamos a recuperar el valor de cada cliente
+                  // valor.cliente(este cliente es el valor del html)
+                  var clienteCargado = this.clientes.find(function(cliente){
+                    return cliente.nombre === nombreCliente; // 2º cliente es el del var de arriba
+                  });
+                  if(clienteCargado){ // Si existe clienteCargado
+                    this.formPre.value.cif = clienteCargado.cif;
+                  } else {
+                    this.formPre.value.cif = '';
+                  }
                   var importe = 0;
                   var suma = 0;
                   var i;
@@ -100,9 +112,11 @@ export class CrearPresComponent implements OnInit {
                     var referencia = valor.items[i].articulo;
                     var articuloCargado = this.articulos.find(function(articulo){
                       return articulo.referencia === referencia;
-                    });
+                    }); // Esto es para que busque con la flecha
                     if(articuloCargado){
                       this.formPre.value.items[i].precio = articuloCargado.precio;
+                    } else {
+                      this.formPre.value.items[i].precio = 0;
                     }
                     // articuloCargado es el que se va seleccionando en cada momento
                     this.formPre.value.items[i].importe = this.redondear(valor.items[i].cantidad 
@@ -130,6 +144,7 @@ export class CrearPresComponent implements OnInit {
   guardarPresupuesto(){
     const guardarPresupuesto = {
       cliente: this.formPre.get('cliente').value,
+      cif: this.formPre.get('cif').value,
       fecha: this.formPre.get('fecha').value,
       items: this.formPre.get('items').value,
       suma: this.formPre.get('suma').value,
@@ -137,5 +152,6 @@ export class CrearPresComponent implements OnInit {
       iva: this.formPre.get('iva').value,
       total: this.formPre.get('total').value,
     }
+    return guardarPresupuesto;
   }
 }

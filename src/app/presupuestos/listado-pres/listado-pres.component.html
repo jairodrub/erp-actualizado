@@ -32,12 +32,14 @@
 <div class="col-md-12">
   <table class="table table-bordered table-striped tabla-facturas">
     <tr>
+      <th style="width:10%">Nº</th>
       <th>Cliente</th>
       <th>CIF</th>
       <th>Total</th>
       <th></th>
     </tr>
     <tr *ngFor="let presupuesto of presupuestos">
+      <td style="width:10%">{{presupuesto.num}}</td>
       <td>{{presupuesto.cliente}}</td>
       <td>{{presupuesto.cif}}</td>
       <td>{{presupuesto.total}}</td>

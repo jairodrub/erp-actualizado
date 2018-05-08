@@ -1,37 +1,38 @@
 <div class="barra-fija">
-    <div title="Clientes" 
-          routerLink="/listado-clientes">
-        <i class="fas fa-address-book"></i>
-    </div>
-    <div title="Presupuestos" 
+  <div title="Clientes" 
+        routerLink="/listado-clientes">
+      <i class="fas fa-address-book"></i>
+  </div>
+  <div title="Presupuestos" 
+        routerLink="/listado-presupuestos">
+      <i class="fas fa-money-bill-alt"></i>
+  </div>
+</div>
+<div class="col-md-12">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+      <li class="breadcrumb-item"><a routerLink="/ventas">Ventas</a></li>
+      <li class="breadcrumb-item"><a routerLink="/listado-presupuestos">Presupuestos</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Añadir presupuesto</li>
+    </ol>
+  </nav>
+</div>
+<div class="col-md-12 titulo">
+  <span>Añadir nuevo presupuesto</span>
+  <button class="btn btn-primary"
           routerLink="/listado-presupuestos">
-        <i class="fas fa-money-bill-alt"></i>
-    </div>
-  </div>
-  <div class="col-md-12">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
-        <li class="breadcrumb-item"><a routerLink="/ventas">Ventas</a></li>
-        <li class="breadcrumb-item"><a routerLink="/listado-presupuestos">Presupuestos</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Añadir presupuesto</li>
-      </ol>
-    </nav>
-  </div>
-  <div class="col-md-12 titulo">
-    <span>Añadir nuevo presupuesto</span>
-    <button class="btn btn-primary"
-            routerLink="/listado-presupuestos">
-      <strong>Volver</strong>
-    </button>
-  </div>
-  <div class="col-md-10 offset-md-1 col-12">
-    <div class="formulario">
-      <form [formGroup]="formPre">
-        <div class="form-group">
+    <strong>Volver</strong>
+  </button>
+</div>
+<div class="col-md-10 offset-md-1 col-12">
+  <div class="formulario">
+    <form [formGroup]="formPre">
+      <div class="form-row">
+        <div class="form-group col-md-4">
           <label for="cliente">Cliente</label>
           <input type="text" class="form-control"
-                 formControlName="cliente" list="clientes">
+                  formControlName="cliente" list="clientes">
           <datalist id="clientes">
             <option *ngFor="let cliente of clientes"
                   [value]="cliente.nombre">
@@ -39,142 +40,149 @@
             </option>
           </datalist>
         </div>
-        <div class="form-group">
+        <div class="form-group col-md-4">
+          <label for="cif">CIF</label>
+          <input type="text" class="form-control"
+                  formControlName="cif"
+                  [(ngModel)]="formPre.value.cif"
+                  readonly>
+        </div>
+        <div class="form-group col-md-4">
           <label for="fecha">Fecha</label>
           <input type="date" class="form-control"
-                 formControlName="fecha">
+                  formControlName="fecha">
         </div>
-        <div class="form-group">
-          <h5>Artículos</h5>
-          <hr>
+      </div>
+      <div class="form-group">
+        <h5>Artículos</h5>
+        <hr>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-1">
+          <label>Nº</label>
         </div>
-        <div class="form-row">
-          <div class="form-group col-md-1">
-              <label>Nº</label>
-          </div>
-          <div class="form-group col-md-4">
-              <label>Artículo</label>
-          </div>
-          <div class="form-group col-md-2">
-              <label>Cantidad</label>
-          </div>
-          <div class="form-group col-md-2"
-               style= "text-align:right">
-              <label>Precio</label>
-          </div>
-          <div class="form-group col-md-2"
-               style= "text-align:right">
-              <label>Importe</label>
-          </div>
+        <div class="form-group col-md-4">
+          <label>Artículo</label>
         </div>
-        <div formArrayName="items">
-          <div *ngFor="let item of formPre.controls.items.controls; let i=index">
-            <div [formGroupName]="i" class="form-row">
-              <div class="form-group col-md-1">
-                <input type="text" class="form-control"
-                       value="{{i+1}}" disabled>
-              </div>
-              <div class="form-group col-md-4">
-                <input type="text" class="form-control"
-                       formControlName="articulo" list="articulos">
-                <datalist id="articulos">
-                  <option *ngFor="let articulo of articulos"
-                        [value]="articulo.referencia">
-                    {{articulo.referencia}}
-                  </option>
-                </datalist>
-              </div>
-              <div class="form-group col-md-2">
-                <input type="number" class="form-control"
-                        formControlName="cantidad">
-              </div>
-              <div class="form-group col-md-2">
-                <input type="number" class="form-control"
-                        formControlName="precio"
-                        [(ngModel)]="formPre.value.items[i].precio"
-                        readonly>
-              </div>
-              <div class="form-group col-md-2">
-                <input type="number" class="form-control"
-                        formControlName="importe"
-                        [(ngModel)]="formPre.value.items[i].importe"
-                        readonly>
-              </div>
-              <div class="form-group col-md-1">
-                <button class="btn btn-danger"
-                        (click)="removeItem(i)">
-                    <i class="fas fa-minus-circle"></i>
-                </button>
-              </div>
+        <div class="form-group col-md-2">
+          <label>Cantidad</label>
+        </div>
+        <div class="form-group col-md-2"
+             style="text-align: right">
+          <label>Precio</label>
+        </div>
+        <div class="form-group col-md-2"
+             style="text-align: right">
+          <label>Importe</label>
+        </div>
+      </div>
+      <div formArrayName="items">
+        <div *ngFor="let item of formPre.controls.items.controls; let i=index">
+          <div [formGroupName]="i" class="form-row">
+            <div class="form-group col-md-1">
+              <input type="text" class="form-control"
+                     value="{{i+1}}" disabled>
+            </div>
+            <div class="form-group col-md-4">
+              <input type="text" class="form-control"
+                     formControlName="articulo" list="articulos">
+              <datalist id="articulos">
+                <option *ngFor="let articulo of articulos"
+                      [value]="articulo.referencia">
+                  {{articulo.referencia}}
+                </option>
+              </datalist>
+            </div>
+            <div class="form-group col-md-2">
+              <input type="number" class="form-control"
+                      formControlName="cantidad">
+            </div>
+            <div class="form-group col-md-2">
+              <input type="number" class="form-control"
+                      formControlName="precio"
+                      [(ngModel)]="formPre.value.items[i].precio"
+                      readonly>
+            </div>
+            <div class="form-group col-md-2">
+              <input type="number" class="form-control"
+                      formControlName="importe"
+                      [(ngModel)]="formPre.value.items[i].importe"
+                      readonly>
+            </div>
+            <div class="form-group col-md-1">
+              <button class="btn btn-danger"
+                      (click)="removeItem(i)">
+                  <i class="fas fa-minus-circle"></i>
+              </button>
             </div>
           </div>
         </div>
-        <div class="form-row">
-          <div class="col-md-1">
-            <button class="btn btn-primary"
-                    (click)="addItem()">
-                    <i class="fas fa-plus-circle"></i>
-            </button>
-          </div>
-          <div class="col-md-6"></div>
-          <div class="col-md-2" 
-               style="text-align:right; margin-top: 5px;">
-              <label for="suma">Suma</label>
-          </div>
-          <div class="col-md-2">
-            <input type="number" class="form-control"
-                    formControlName="suma"
-                    [(ngModel)]="formPre.value.suma"
-                    readonly>
-          </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-1">
+          <button class="btn btn-primary"
+                  (click)="addItem()">
+                  <i class="fas fa-plus-circle"></i>
+          </button>
         </div>
-        <div class="form-row" style="margin-top: 10px;">
-          <div class="col-md-7" style="text-align: right; margin-top: 10px">
-            <label>% IVA</label>
-          </div>
-          <div class="col-md-2">
-            <select class="form-control" 
-                    formControlName="tipo"
-                    value=0.21>
+        <div class="col-md-6"></div>
+        <div class="col-md-2" 
+             style="text-align:right; margin-top: 10px;">
+            <label for="suma">Suma</label>
+        </div>
+        <div class="col-md-2">
+          <input type="number" class="form-control"
+                  formControlName="suma"
+                  [(ngModel)]="formPre.value.suma"
+                  readonly>
+        </div>
+      </div>
+      <div class="form-row" style="margin-top: 10px;">
+        <div class="col-md-7" style="text-align: right; margin-top: 10px;">
+          <label>% IVA</label>
+        </div>
+        <div class="col-md-2">              
+            <select class="form-control"
+                    formControlName="tipo">
               <option value=0>0 %</option>
               <option value=0.04>4 %</option>
               <option value=0.1>10 %</option>
               <option value=0.21>21 %</option>
             </select>
-          </div>
-          <div class="col-md-2">
-            <input type="number" class="form-control"
-                   formControlName="iva"
-                   [(ngModel)]="formPre.value.iva"
-                   readonly>
-          </div>
         </div>
-        <div class="form-row" style="margin-top: 10px;">
-          <div class="col-md-9" style="text-align: right; margin-top: 10px">
-            <label>
-              Total Presupuesto IVA incluido
-            </label>
-          </div>
-          <div class="col-md-2">
-            <input type="number" class="form-control"
-                    formControlName="total"
-                    [(ngModel)]="formPre.value.total"
-                   readonly>
-            </div>
-          </div>
-          <div class="form-row" style="margin-top: 10px">
-            <div class="col-md-11" style="text-align:right">
-              <button class="btn btn-danger" routerLink="/listado-presupuestos">
-                Cancelar
-              </button>
-              <button class="btn btn-primary"
-                      (click)="crearPresupuesto()">
-              <!-- click igual que ngSubmit, pero ngSubmit con un campo -->
-                Añadir presupuesto
-              </button>
-            </div>
-          </div>
-      </form>
-      <pre>{{formPre.value | json}}</pre>
-    </div>
+        <div class="col-md-2">
+          <input type="number" class="form-control"
+                 formControlName="iva"
+                 [(ngModel)]="formPre.value.iva"
+                  readonly>
+        </div>
+      </div>
+      <div class="form-row" style="margin-top: 10px;">
+        <div class="col-md-9" style="text-align: right; margin-top: 10px;">
+          <label>
+            Total Presupuesto IVA incluido
+          </label>
+        </div>
+        <div class="col-md-2">
+          <input type="number" class="form-control"
+                 formControlName="total"
+                 [(ngModel)]="formPre.value.total"
+                 readonly>
+        </div>
+      </div>
+      <div class="form-row" style="margin-top: 10px;">
+        <div class="col-md-11" style="text-align: right;">
+          <button class="btn btn-danger"
+                  routerLink="/listado-presupuestos">
+            Cancelar
+          </button>
+          <button class="btn btn-primary"
+                  (click)="crearPresupuesto()">
+                  <!-- click igual que ngSubmit, pero ngSubmit con un campo -->
+            Añadir presupuesto
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
+</div>
