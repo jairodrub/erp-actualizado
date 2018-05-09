@@ -20,6 +20,15 @@ export class PresupuestosService {
                     });
   } 
 
+  getTotalesPorCliente() {
+    let url = 'http://localhost:3000/presupuesto/cliente/'; // Hay que meter la barra para que no se junte el id
+    return this.http.get(url) // id la pasamos tb a fila 24
+                    .map( (resp:any) => { // Con la flecha deja de protestar
+                    //la tipamos con any para que no proteste (angular)
+                    return resp;
+                    });
+  }
+
   getPresupuestoId(id) {
     let url = 'http://localhost:3000/presupuesto/'; // Hay que meter la barra para que no se junte el id
     return this.http.get(url + id) // id la pasamos tb a fila 24

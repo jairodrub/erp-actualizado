@@ -1,6 +1,6 @@
 <div class="barra-fija">
   <div title="Clientes" 
-        routerLink="/listado-clientes">
+       routerLink="/listado-clientes">
       <i class="fas fa-address-book"></i>
   </div>
   <div title="Presupuestos" 
@@ -8,8 +8,7 @@
       <i class="fas fa-money-bill-alt"></i>
   </div>
   <div title="Articulos" 
-        routerLink="/listado-articulos">
-        <!-- artículos = items -->
+      routerLink="/listado-articulos">
       <i class="fas fa-archive"></i>
   </div>
 </div>
@@ -23,4 +22,34 @@
 </div>
 <div class="col-md-12 titulo">
     <span>Dashboard</span>
+</div>
+<div class="col-md-12" style="text-align: center;">
+  <div class="custom-control custom-radio custom-control-inline">
+    <input type="radio" id="customRadioInline1" class="custom-control-input"
+            name="customRadioInline1" 
+            (click)="primerTrimestre()">
+    <label class="custom-control-label" for="customRadioInline1">
+      1<sup>er</sup> Trimestre
+    </label>
+  </div>
+  <div class="custom-control custom-radio custom-control-inline">
+    <input type="radio" id="customRadioInline2" class="custom-control-input"
+            name="customRadioInline1" 
+            (click)="segundoTrimestre()" checked>
+    <label class="custom-control-label" for="customRadioInline2">
+      2<sup>o</sup> Trimestre
+    </label>
+  </div>
+</div>
+<div class="col-md-12">
+  <div style="width: 60%; margin: 40px auto;" 
+       *ngIf="chartPtosTrimestre">
+    <canvas id="grafico1">{{chartPtosTrimestre}}</canvas>
+  </div>
+</div>
+<div class="col-md-12">
+  <div style="width: 60%; margin: 40px auto;" 
+       *ngIf="chartTotalesClientes">
+    <canvas id="grafico2">{{chartTotalesClientes}}</canvas>
+  </div>
 </div>
